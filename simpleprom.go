@@ -10,10 +10,10 @@ import (
 
 type metricsServer struct {
 	// HTTP Handler for exposing Prometheus Metrics (recommended to bind to the /metrics endpoint)
-	Handler *http.Handler
+	Handler http.Handler
 
 	registry *prometheus.Registry
-	factory  *promauto.Factory
+	factory  promauto.Factory
 }
 
 // Metrics - container used for creating counters, histograms, gauges, etc...
@@ -25,11 +25,8 @@ func init() {
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 	)
 
-	factory := promauto.With(Metrics.registry)
-	Metrics.factory = &factory
-
-	metricsHandler := promhttp.HandlerFor(Metrics.registry, promhttp.HandlerOpts{Registry: Metrics.registry})
-	Metrics.Handler = &metricsHandler
+	Metrics.factory = promauto.With(Metrics.registry)
+	Metrics.Handler = promhttp.HandlerFor(Metrics.registry, promhttp.HandlerOpts{Registry: Metrics.registry})
 }
 
 func (metrics metricsServer) NewCounter(opts prometheus.CounterOpts) prometheus.Counter {
