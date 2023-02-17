@@ -1,4 +1,4 @@
-module simple-prom
+module github.com/RyanGuthrie/simple_prom
 
 go 1.20
 
