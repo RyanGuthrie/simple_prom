@@ -4,7 +4,7 @@ Simple wrapper around the GoLang client for Prometheus
 ## Usage
 go.mod
 
-    require github.com/RyanGuthrie/simple_prom
+    require github.com/RyanGuthrie/simple_prom latest
 
 ### Exposing `/metrics` endpoint
 

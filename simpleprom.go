@@ -13,7 +13,7 @@ type metricsServer struct {
 	Handler http.Handler
 
 	registry *prometheus.Registry
-	factory  promauto.Factory
+	factory  *promauto.Factory
 }
 
 // Metrics - container used for creating counters, histograms, gauges, etc...
@@ -25,7 +25,8 @@ func init() {
 		collectors.NewProcessCollector(collectors.ProcessCollectorOpts{}),
 	)
 
-	Metrics.factory = promauto.With(Metrics.registry)
+	factory := promauto.With(Metrics.registry)
+	Metrics.factory = &factory
 	Metrics.Handler = promhttp.HandlerFor(Metrics.registry, promhttp.HandlerOpts{Registry: Metrics.registry})
 }
 
