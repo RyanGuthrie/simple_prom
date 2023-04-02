@@ -22,3 +22,11 @@ Creating new metrics, for example a counter:
 		Name:      "requests",
 		Help:      "Number of HTTP requests made overall across all endpoints",
 	})
+
+## Releasing a new version
+
+Run the `tag.sh` script
+
+    $ ./tag v1.0.9
+
+That'll ensure everything has been committed, and tag the current revision
