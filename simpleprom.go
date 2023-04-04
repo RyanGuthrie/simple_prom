@@ -1,11 +1,12 @@
 package simple_prom
 
 import (
+	"net/http"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"net/http"
 )
 
 type metricsServer struct {
@@ -33,4 +34,8 @@ func (metrics metricsServer) NewCounter(opts prometheus.CounterOpts) prometheus.
 
 func (metrics metricsServer) NewHistogram(opts prometheus.HistogramOpts) prometheus.Histogram {
 	return promauto.With(metrics.registry).NewHistogram(opts)
+}
+
+func (metrics metricsServer) NewSummary(opts prometheus.SummaryOpts) prometheus.Summary {
+	return promauto.With(metrics.registry).NewSummary(opts)
 }
