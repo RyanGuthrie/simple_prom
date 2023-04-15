@@ -39,3 +39,7 @@ func (metrics metricsServer) NewHistogram(opts prometheus.HistogramOpts) prometh
 func (metrics metricsServer) NewSummary(opts prometheus.SummaryOpts) prometheus.Summary {
 	return promauto.With(metrics.registry).NewSummary(opts)
 }
+
+func (metrics metricsServer) NewGauge(opts prometheus.GaugeOpts) prometheus.Gauge {
+	return promauto.With(metrics.registry).NewGauge(opts)
+}
