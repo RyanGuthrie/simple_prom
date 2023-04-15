@@ -1,6 +1,7 @@
 package simple_prom
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -47,7 +48,7 @@ func (metrics metricsServer) NewGauge(opts prometheus.GaugeOpts) prometheus.Gaug
 
 // NewGaugeFunc creates a gauge and every 60 seconds, queries the `f` func for the current value to publish.  This is good for applying long-lived
 // gauges that can be updated via an isolated function.  The underlying Go Routine can be stopped by closing the `chan` returned
-func (metrics metricsServer) NewGaugeFunc(opts prometheus.GaugeOpts, f func() float64) chan bool {
+func (metrics metricsServer) NewGaugeFunc(opts prometheus.GaugeOpts, updateFrequency time.Duration, f func() float64) chan bool {
 	gauge := promauto.With(metrics.registry).NewGauge(opts)
 
 	closeChan := make(chan bool)
@@ -56,10 +57,11 @@ func (metrics metricsServer) NewGaugeFunc(opts prometheus.GaugeOpts, f func() fl
 		for {
 			select {
 			case <-closeChan:
+				log.Printf("Shutting down gauge for %v\n", gauge)
 				break
 			default:
 				gauge.Set(f())
-				time.Sleep(60 * time.Second)
+				time.Sleep(updateFrequency)
 			}
 		}
 	}()
