@@ -34,6 +34,10 @@ func (metrics metricsServer) NewCounter(opts prometheus.CounterOpts) prometheus.
 	return promauto.With(metrics.registry).NewCounter(opts)
 }
 
+func (metrics metricsServer) NewCounterVec(opts prometheus.CounterOpts, labelNames []string) *prometheus.CounterVec {
+	return promauto.With(metrics.registry).NewCounterVec(opts, labelNames)
+}
+
 func (metrics metricsServer) NewHistogram(opts prometheus.HistogramOpts) prometheus.Histogram {
 	return promauto.With(metrics.registry).NewHistogram(opts)
 }
